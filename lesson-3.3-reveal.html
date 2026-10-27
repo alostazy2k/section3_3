@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 3.3 — Derivatives of Trigonometric Functions</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css'">
+
+<style>
+  /* ============================ THEME TOKENS ============================ */
+  :root, :root[data-theme="dark"]{
+    --bg-0:#0B0F1E;
+    --grad-1:rgba(45,212,191,0.10); --grad-2:rgba(245,185,66,0.08); --grad-3:rgba(96,165,250,0.05);
+    --panel:rgba(255,255,255,0.045); --panel-2:rgba(255,255,255,0.028);
+    --panel-border:rgba(255,255,255,0.09); --hover:rgba(255,255,255,0.09);
+    --teal:#2DD4BF; --gold:#F5B942; --rose:#FF6B8A; --blue:#60A5FA; --green:#4ADE80;
+    --text-hi:#EDEFF7; --text-lo:#9BA1BC; --rule:rgba(255,255,255,0.08);
+    --board-grid:rgba(255,255,255,0.045); --board-solid:#0A0E1C;
+    --bar-bg:rgba(16,21,40,0.86);
+    --tealsoft:rgba(45,212,191,0.14); --goldsoft:rgba(245,185,66,0.14);
+    --rosesoft:rgba(255,107,138,0.14); --bluesoft:rgba(96,165,250,0.14);
+    --greensoft:rgba(74,222,128,0.14);
+    --shadow:0 10px 30px rgba(0,0,0,0.35);
+  }
+  :root[data-theme="light"]{
+    --bg-0:#F4F6FB;
+    --grad-1:rgba(14,147,132,0.10); --grad-2:rgba(180,120,10,0.09); --grad-3:rgba(37,99,235,0.06);
+    --panel:rgba(255,255,255,0.80); --panel-2:rgba(15,23,42,0.035);
+    --panel-border:rgba(15,23,42,0.11); --hover:rgba(15,23,42,0.05);
+    --teal:#0E9384; --gold:#B4780A; --rose:#D6336C; --blue:#2563EB; --green:#15803D;
+    --text-hi:#10141F; --text-lo:#56607A; --rule:rgba(15,23,42,0.11);
+    --board-grid:rgba(15,23,42,0.06); --board-solid:#FBFCFE;
+    --bar-bg:rgba(255,255,255,0.92);
+    --tealsoft:rgba(14,147,132,0.12); --goldsoft:rgba(180,120,10,0.12);
+    --rosesoft:rgba(214,51,108,0.11); --bluesoft:rgba(37,99,235,0.11);
+    --greensoft:rgba(21,128,61,0.12);
+    --shadow:0 10px 30px rgba(15,23,42,0.10);
+  }
+
+  *{ box-sizing:border-box; }
+
+  /* The slide is a fixed 1600 x 900 canvas that reveal.js scales to the screen,
+     so one root size drives every rem below — no breakpoints needed. */
+  html{ font-size:24px; }
+
+  html, body, .reveal-viewport{
+    margin:0; padding:0;
+    background:
+      radial-gradient(ellipse 60vw 55vh at 15% -10%, var(--grad-1), transparent 60%),
+      radial-gradient(ellipse 60vw 55vh at 90% 8%, var(--grad-2), transparent 55%),
+      radial-gradient(ellipse 55vw 65vh at 50% 70%, var(--grad-3), transparent 60%),
+      var(--bg-0);
+    background-attachment:fixed;
+    color:var(--text-hi); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+
+  /* ============================ REVEAL SHELL ============================ */
+  .reveal{ font-family:'Inter',sans-serif; font-size:1rem; color:var(--text-hi); }
+  .reveal .slides{ text-align:left; }
+  .reveal .slides section{ height:100%; padding:0; }
+  .reveal .controls{ color:var(--teal); font-size:clamp(8px,0.93vh,20px); }
+  .reveal .progress{ color:var(--teal); height:4px; background:var(--rule); }
+  .reveal a{ color:var(--teal); text-decoration:none; }
+  .reveal .slides section .fragment{ transition:opacity .28s ease, visibility .28s ease; }
+
+  body.booting .reveal{ opacity:0; }
+  #bootmsg{ position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-style:italic; font-size:22px; color:var(--text-lo); z-index:5; }
+  body.booting #bootmsg{ display:flex; }
+
+  /* one slide = top strip + a main area whose content is scaled to fit */
+  .sl{ position:absolute; inset:0; padding:30px 56px 82px; display:flex; flex-direction:column; overflow:hidden; }
+  .sl-top{ flex:0 0 auto; display:flex; align-items:center; gap:14px; height:44px; margin-bottom:18px; }
+  .sl-top .num{ font-family:'Fraunces',serif; font-size:0.86rem; color:#0B0F1E;
+    background:linear-gradient(135deg,var(--teal),var(--gold));
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-weight:600; flex:0 0 auto; }
+  .sl-top .bt{ font-family:'Fraunces',serif; font-weight:500; font-size:1.08rem; white-space:nowrap; }
+  .sl-top .line{ flex:1; height:1px; background:var(--rule); }
+  .sl-top .it{ font-family:'Fraunces',serif; font-style:italic; font-size:0.92rem; color:var(--text-lo); white-space:nowrap; }
+  .sl-main{ flex:1 1 auto; min-height:0; position:relative; }
+  .sl-fit{ position:absolute; left:0; top:0; width:100%; transform-origin:0 0; }
+
+  .glass{ background:var(--panel); border:1px solid var(--panel-border);
+    border-radius:16px; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+
+  /* ============================ TITLE SLIDE ============================ */
+  .title-grid{ display:grid; grid-template-columns:1.05fr 1fr; gap:56px; align-items:center; padding-top:34px; }
+  .kicker-line{ display:flex; align-items:center; gap:10px; margin-bottom:1.3rem; }
+  .kicker-line .dot{ width:9px; height:9px; border-radius:50%;
+    background:linear-gradient(90deg,var(--teal),var(--gold)); }
+  .kicker-line span{ font-size:0.9rem; color:var(--text-lo); letter-spacing:0.01em; }
+  h1{ font-family:'Fraunces',serif; font-weight:500; font-size:4.2rem; line-height:1.04; margin:0 0 1.8rem; }
+  h1 .sec{ display:block; font-size:0.3em; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--text-lo); font-family:'Inter',sans-serif; font-weight:600; margin-bottom:0.9rem; }
+  h1 em{ font-style:italic; font-weight:400;
+    background:linear-gradient(90deg,var(--teal),var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .agenda{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .reveal .agenda a{ display:flex; align-items:center; gap:14px; padding:0.42rem 0.8rem; border-radius:11px;
+    color:var(--text-hi); background:var(--panel-2); border:1px solid var(--rule);
+    font-size:0.9rem; transition:background .15s ease, border-color .15s ease; }
+  .reveal .agenda a:hover{ background:var(--hover); border-color:var(--teal); }
+  .agenda b{ font-family:'Fraunces',serif; font-weight:600; font-size:0.78rem; color:#0B0F1E;
+    background:linear-gradient(135deg,var(--teal),var(--gold));
+    width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+  .objectives{ padding:1.4rem 1.6rem; border-radius:16px; background:var(--panel); border:1px solid var(--panel-border); }
+  .objectives .oh{ font-size:0.74rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--teal); font-weight:600; margin-bottom:0.9rem; }
+  .objectives ul{ margin:0; padding-left:1.15rem; }
+  .objectives li{ color:var(--text-hi); font-size:1rem; line-height:1.55; margin-bottom:0.65rem; }
+  .title-foot{ margin-top:40px; padding-top:18px; border-top:1px solid var(--rule);
+    display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap;
+    color:var(--text-lo); font-size:0.72rem; }
+  .title-foot kbd{ font-family:'Inter',sans-serif; font-size:0.92em; font-weight:600; color:var(--text-hi);
+    background:var(--panel-2); border:1px solid var(--panel-border); border-radius:6px; padding:0.08rem 0.4rem; margin-right:0.25rem; }
+  .title-foot .keys span{ margin-left:1rem; white-space:nowrap; }
+
+  /* ============================ STATEMENT BOXES ============================ */
+  .box{ margin:0 0 16px; border-radius:13px; overflow:hidden;
+    border:1px solid var(--panel-border); background:var(--panel); }
+  .box:last-child{ margin-bottom:0; }
+  .box-head{ display:flex; align-items:baseline; flex-wrap:wrap; gap:0.6rem;
+    padding:0.6rem 1.1rem; border-bottom:1px solid var(--rule); }
+  .box-kind{ font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; }
+  .box-name{ font-family:'Fraunces',serif; font-style:italic; font-size:0.95rem; color:var(--text-lo); }
+  .box-body{ padding:0.85rem 1.2rem; font-size:1rem; line-height:1.62; color:var(--text-hi); }
+  .box-body p{ margin:0.4rem 0; }
+  .box-body ol,.box-body ul{ margin:0.4rem 0; padding-left:1.5rem; }
+  .box-body li{ margin-bottom:0.3rem; }
+  .box-body .sub{ color:var(--text-lo); }
+
+  .box.def   { border-left:4px solid var(--teal);  }
+  .box.def   .box-head{ background:var(--tealsoft); }  .box.def   .box-kind{ color:var(--teal); }
+  .box.thm   { border-left:4px solid var(--blue);  }
+  .box.thm   .box-head{ background:var(--bluesoft); }  .box.thm   .box-kind{ color:var(--blue); }
+  .box.cor   { border-left:4px solid var(--rose);  }
+  .box.cor   .box-head{ background:var(--rosesoft); }  .box.cor   .box-kind{ color:var(--rose); }
+  .box.rem   { border-left:4px dashed var(--gold); }
+  .box.rem   .box-head{ background:var(--goldsoft); }  .box.rem   .box-kind{ color:var(--gold); }
+  .box.rem   .box-body{ color:var(--text-lo); }
+
+  .boxrow{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .boxrow .box{ margin:0; }
+
+  /* ============================ INTERACTIVE WIDGETS ============================ */
+  .widget{ margin:0; padding:16px 20px 18px; }
+  .widget-head{ display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+  .widget-head .wtag{ font-size:0.66rem; letter-spacing:0.12em; text-transform:uppercase;
+    font-weight:700; color:#0B0F1E; background:linear-gradient(135deg,var(--teal),var(--gold));
+    padding:0.22rem 0.6rem; border-radius:5px; }
+  .widget-head h3{ font-family:'Fraunces',serif; font-weight:500; font-size:1.12rem; margin:0; }
+
+  .wgrid{ display:grid; grid-template-columns:1.35fr 1fr; gap:24px; align-items:start; }
+
+  .plot-host{ width:100%; }
+  .plot-host svg{ display:block; width:100%; height:auto; max-height:var(--ph,none); border-radius:10px; }
+
+  /* Figure lettering. plot() writes pixel sizes that were tuned for the scroll page;
+     on a slide the surrounding text is larger, so the labels are scaled up here
+     (the drawing code and the geometry stay exactly as they were). */
+  .plot-host svg text[font-size="14"]{ font-size:19px; }
+  .plot-host svg text[font-size="15"]{ font-size:21px; }
+  .plot-host svg text[font-size="16"]{ font-size:22px; }
+  .plot-host svg text[font-size="17"]{ font-size:23px; }
+  .plot-host svg text[font-size="18"]{ font-size:25px; }
+  /* tick numbers a little brighter than on the page, for a projector */
+  .plot-host svg text[fill="rgba(255,255,255,0.40)"]{ fill:rgba(255,255,255,0.66); }
+  .plot-host svg text[fill="rgba(15,23,42,0.50)"]{ fill:rgba(15,23,42,0.72); }
+
+  .ctrl{ display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+  .ctrl label{ font-size:0.92rem; color:var(--text-lo); min-width:2.4rem; }
+  .ctrl .val{ font-family:'Fraunces',serif; font-size:1.15rem; color:var(--gold);
+    min-width:3.6rem; text-align:right; }
+
+  /* sliders sized for a finger or a smart-board pen */
+  .ctrl input[type=range]{ -webkit-appearance:none; appearance:none; flex:1; min-width:140px;
+    height:40px; margin:0; background:transparent; cursor:pointer; }
+  .ctrl input[type=range]:focus{ outline:none; }
+  .ctrl input[type=range]::-webkit-slider-runnable-track{ height:8px; border-radius:4px; background:var(--panel-border); }
+  .ctrl input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none;
+    width:30px; height:30px; margin-top:-11px; border-radius:50%;
+    background:var(--teal); border:3px solid var(--bg-0); box-shadow:0 0 0 1px var(--teal); }
+  .ctrl input[type=range]::-moz-range-track{ height:8px; border-radius:4px; background:var(--panel-border); }
+  .ctrl input[type=range]::-moz-range-thumb{ width:24px; height:24px; border-radius:50%;
+    background:var(--teal); border:3px solid var(--bg-0); box-shadow:0 0 0 1px var(--teal); }
+
+  .tabs{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+  .tab{ font-size:0.82rem; color:var(--text-lo); background:var(--panel-2);
+    border:1px solid var(--panel-border); padding:0.42rem 0.95rem; border-radius:999px;
+    cursor:pointer; transition:all .15s ease; }
+  .tab:hover{ color:var(--text-hi); background:var(--hover); }
+  .tab.on{ color:var(--teal); background:var(--tealsoft); border-color:var(--teal); }
+
+  .lamps{ display:flex; flex-direction:column; gap:9px; }
+  .lamp{ display:flex; align-items:center; gap:12px; padding:0.6rem 0.9rem;
+    border-radius:10px; border:1px solid var(--rule); background:var(--panel-2);
+    font-size:0.94rem; transition:background .2s ease,border-color .2s ease; }
+  .lamp .bulb{ width:13px; height:13px; border-radius:50%; flex:0 0 auto;
+    background:var(--text-lo); transition:background .2s ease,box-shadow .2s ease; }
+  .lamp.ok  { border-color:var(--green); background:var(--greensoft); }
+  .lamp.ok  .bulb{ background:var(--green); box-shadow:0 0 9px var(--green); }
+  .lamp.bad { border-color:var(--rose);  background:var(--rosesoft); }
+  .lamp.bad .bulb{ background:var(--rose); box-shadow:0 0 9px var(--rose); }
+
+  /* fixed two-line height: the text length changes as a slider moves, the slide must not */
+  .verdict{ margin-top:12px; padding:0.6rem 1rem; border-radius:10px; text-align:center;
+    font-family:'Fraunces',serif; font-size:1.02rem; line-height:1.35; border:1px solid var(--rule);
+    background:var(--panel-2); color:var(--text-lo);
+    min-height:calc(2.7em + 1.2rem); display:flex; align-items:center; justify-content:center; }
+  .verdict.ok { border-color:var(--green); background:var(--greensoft); color:var(--green); }
+  .verdict.bad{ border-color:var(--rose);  background:var(--rosesoft); color:var(--rose); }
+
+  .readout{ display:grid; grid-template-columns:auto 1fr; gap:0.45rem 1rem;
+    font-size:0.94rem; margin:0 0 12px; align-items:center; }
+  .readout dt{ color:var(--text-lo); }
+  .readout dd{ margin:0; color:var(--text-hi); font-family:'Fraunces',serif; font-size:1.05rem; }
+  #w2-note{ min-height:6.6em; }
+
+  .caption{ font-family:'Fraunces',serif; font-style:italic; font-size:0.8rem;
+    color:var(--text-lo); text-align:center; margin-top:8px; }
+
+  /* ============================ PROBLEM SLIDES ============================ */
+  .q{ display:flex; align-items:flex-start; gap:16px; padding:16px 20px; margin-bottom:16px; }
+  .prob-badge{ flex:0 0 auto; font-size:0.7rem; letter-spacing:0.09em; text-transform:uppercase;
+    padding:0.3rem 0.62rem; border-radius:6px; font-weight:700; margin-top:0.18rem; white-space:nowrap; }
+  .b-ex{ background:var(--tealsoft); color:var(--teal); }
+  .b-rel{ background:var(--bluesoft); color:var(--blue); }
+  .b-exer{ background:var(--goldsoft); color:var(--gold); }
+  .b-ch{ background:var(--rosesoft); color:var(--rose); }
+  .badge-wrap{ flex:0 0 auto; display:flex; flex-direction:column; align-items:flex-start; gap:6px; margin-top:0.18rem; }
+  .badge-wrap .prob-badge{ margin-top:0; }
+  .offplan{ font-size:0.66rem; font-weight:600; letter-spacing:0.02em;
+    padding:0.2rem 0.5rem; border-radius:5px; white-space:nowrap;
+    color:var(--rose); background:var(--rosesoft); border:1px dashed var(--rose); }
+
+  .prob-q{ flex:1; min-width:0; font-size:1rem; line-height:1.6; }
+  .prob-q .qt{ display:block; font-family:'Fraunces',serif; font-size:1.12rem; margin-bottom:0.25rem; color:var(--text-hi); }
+  .prob-q .qb{ color:var(--text-lo); }
+  .q.compact .qb{ font-size:0.88rem; }
+  .parts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:0.5rem 1.6rem; margin-top:0.6rem; align-items:center; }
+  .parts.g2{ grid-template-columns:1fr 1fr; }
+  .parts > span{ color:var(--text-hi); }
+  .parts .pl, .qpart .pl{ color:var(--gold); font-weight:600; margin-right:0.3rem; }
+  .qpart{ margin-top:0.4rem; color:var(--text-hi); font-size:1.06rem; }
+  .qpart.head{ color:var(--gold); font-weight:600; }
+  .qnote{ display:block; margin-top:0.45rem; font-size:0.84rem; color:var(--text-lo); font-style:italic; }
+
+  .work.two{ display:grid; grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr); gap:24px; align-items:start; }
+  .work.two.narrowfig{ grid-template-columns:minmax(0,0.72fr) minmax(0,1.28fr); }
+  .figcard{ padding:14px; }
+  .figcard.center{ margin:0 auto; }
+  .figrow{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .fdef{ margin:0 0 12px; padding:0.2rem 0.9rem; border-radius:11px; background:var(--panel-2); border:1px solid var(--rule); font-size:0.9rem; }
+
+  /* ---------- step-style solutions ---------- */
+  .part-tag{ display:block; font-weight:700; color:var(--gold); font-size:0.94rem; margin:0.9rem 0 0.2rem; }
+  .steps{ list-style:none; counter-reset:st; padding:0; margin:0.3rem 0 0; }
+  .steps > li{ counter-increment:st; position:relative; padding:0 0 0.72rem 4.3rem; }
+  .steps > li::before{
+    content:"Step " counter(st); position:absolute; left:0; top:0.24rem;
+    font-size:0.6rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:700;
+    color:var(--teal); background:var(--tealsoft); padding:0.18rem 0.4rem; border-radius:5px;
+    white-space:nowrap;
+  }
+  .steps .sx{ display:block; color:var(--text-hi); font-size:1rem; line-height:1.6; }
+  .steps .sm{ display:block; margin:0.3rem 0; }
+  .sol p, .sol ul{ color:var(--text-lo); line-height:1.6; margin:0.4rem 0; }
+  .sol ul{ padding-left:1.4rem; }
+  .sol ul li{ margin-bottom:0.5rem; }
+
+  .mathbox{ margin:0.6rem 0; padding:0.5rem 1.1rem; border-radius:11px;
+    background:var(--panel-2); border:1px solid var(--rule); }
+  .answer{ margin:0.7rem 0 0; padding:0.75rem 1.2rem; border-radius:11px;
+    background:var(--tealsoft); border:1px solid var(--panel-border);
+    border-left:4px solid var(--teal); color:var(--text-lo); font-size:1rem; }
+  .answer .k{ font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--teal); font-weight:700; display:block; margin-bottom:0.25rem; }
+  .answer strong{ color:var(--text-hi); font-weight:600; }
+
+  .katex-display{ margin:0.55em 0; }
+
+  table{ width:100%; border-collapse:collapse; margin:0.6rem 0; font-size:0.94rem; }
+  th,td{ padding:0.55rem 0.55rem; text-align:center; border-bottom:1px solid var(--rule); }
+  th{ color:var(--text-lo); font-weight:500; font-size:0.86rem; }
+  td{ color:var(--text-hi); }
+
+  .tbtn{ font-family:'Inter',sans-serif; font-size:0.84rem; color:var(--text-lo);
+    background:var(--panel-2); border:1px solid var(--panel-border);
+    padding:0.45rem 1rem; border-radius:9px; cursor:pointer; transition:all .15s ease; }
+  .tbtn:hover{ color:var(--text-hi); background:var(--hover); }
+  .tbtn.on{ color:var(--teal); background:var(--tealsoft); border-color:var(--teal); }
+
+  /* ============================ ON-SCREEN TOOLBAR ============================ */
+  #bar, #boardbar{ font-family:'Inter',sans-serif; font-size:clamp(13px,1.5vh,22px); }
+  #bar{ position:fixed; left:0.9em; bottom:0.75em; z-index:40; display:flex; align-items:center; gap:0.45em; }
+  body.board-open #bar, body.embedded #bar, body.booting #bar{ display:none; }
+  .ub{ display:inline-flex; align-items:center; justify-content:center; gap:0.45em;
+    min-width:2.8em; height:2.8em; padding:0 0.75em; border-radius:0.8em; cursor:pointer;
+    font:inherit; font-weight:500; color:var(--text-hi);
+    background:var(--bar-bg); border:1px solid var(--panel-border);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    transition:background .15s ease, border-color .15s ease, color .15s ease; }
+  .ub:hover{ border-color:var(--teal); }
+  .ub:disabled{ opacity:0.35; cursor:default; }
+  .ub svg{ width:1.25em; height:1.25em; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto; }
+  .ub.on{ color:var(--teal); border-color:var(--teal); background:var(--tealsoft); }
+  .ub.sq{ padding:0; }
+  #bPos{ min-width:6.6em; height:2.8em; display:inline-flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:0 0.7em; border-radius:0.8em; background:var(--bar-bg); border:1px solid var(--panel-border);
+    color:var(--text-lo); font-size:0.78em; line-height:1.25; }
+  #bPos b{ font-family:'Fraunces',serif; font-weight:600; font-size:1.2em; color:var(--text-hi); }
+  #bBoard{ position:relative; }
+  #bBoard.has-ink::after{ content:""; position:absolute; top:0.35em; right:0.35em; width:0.5em; height:0.5em;
+    border-radius:50%; background:var(--gold); }
+  #themeBtn svg{ stroke:var(--gold); }
+  :root[data-theme="light"] #themeBtn svg{ stroke:var(--blue); }
+  #themeBtn .t-dark{ display:none; }
+  :root[data-theme="light"] #themeBtn .t-dark{ display:inline; }
+  :root[data-theme="light"] #themeBtn .t-light{ display:none; }
+  #themeBtn .i-moon{ display:none; }
+  :root[data-theme="light"] #themeBtn .i-moon{ display:block; }
+  :root[data-theme="light"] #themeBtn .i-sun{ display:none; }
+
+  /* ============================ FULL-SCREEN BOARD ============================ */
+  #board{ position:fixed; inset:0; z-index:300; display:none; }
+  #board.on{ display:block; }
+  #board canvas{
+    position:absolute; inset:0; width:100%; height:100%; touch-action:none;
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><path d='M3 23.2l1.3-4.4L17 6.1l3.1 3.1L7.4 21.9z' fill='%23F5B942' stroke='%231A1A1A' stroke-width='1.2' stroke-linejoin='round'/><path d='M17 6.1l2.1-2.1a1.7 1.7 0 012.4 0l0.7 0.7a1.7 1.7 0 010 2.4l-2.1 2.1z' fill='%23C9CEDB' stroke='%231A1A1A' stroke-width='1.2' stroke-linejoin='round'/><path d='M3 23.2l2.6-0.9-1.7-1.7z' fill='%231A1A1A'/></svg>") 3 23, crosshair;
+  }
+  #board.erasing canvas{
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><rect x='4' y='12' width='16' height='9' rx='2' transform='rotate(-30 12 16)' fill='%23FF9EB5' stroke='%231A1A1A' stroke-width='1.2'/></svg>") 6 20, cell;
+  }
+  /* "Over slide": the slide stays visible underneath, a thin frame shows the pen is live */
+  #board.over{ box-shadow:inset 0 0 0 3px var(--teal); }
+  /* "Blank page": an opaque ruled sheet */
+  #board.page canvas{
+    background:
+      linear-gradient(var(--board-grid) 1px, transparent 1px) 0 0 / 100% 32px,
+      linear-gradient(90deg, var(--board-grid) 1px, transparent 1px) 0 0 / 32px 100%,
+      var(--board-solid);
+  }
+  #boardbar{ position:absolute; left:50%; bottom:0.75em; transform:translateX(-50%);
+    display:flex; align-items:center; gap:0.9em; padding:0.5em 0.7em; border-radius:1.1em;
+    background:var(--bar-bg); border:1px solid var(--panel-border); box-shadow:var(--shadow);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); white-space:nowrap; }
+  #boardbar .grp{ display:flex; align-items:center; gap:0.4em; }
+  #boardbar .sep{ width:1px; align-self:stretch; background:var(--rule); }
+  #boardbar .ub{ height:2.5em; min-width:2.5em; background:var(--panel-2); backdrop-filter:none; -webkit-backdrop-filter:none; }
+  #boardbar .ub.on{ background:var(--tealsoft); }
+  .sw{ width:1.9em; height:1.9em; border-radius:50%; cursor:pointer; border:3px solid transparent;
+    transition:transform .15s ease,border-color .15s ease; }
+  .sw.on{ border-color:var(--text-hi); transform:scale(1.14); }
+  .szbtn i{ display:block; border-radius:50%; background:currentColor; }
+  .seg{ display:flex; border:1px solid var(--panel-border); border-radius:0.8em; overflow:hidden; }
+  .seg .ub{ border:0; border-radius:0; }
+
+  /* ============================ FALLBACK (reveal.js did not load) ============================ */
+  #failmsg{ display:none; }
+  body.no-reveal{ overflow:auto; }
+  body.no-reveal #failmsg{ display:block; position:sticky; top:0; z-index:50; padding:10px 18px; font-size:15px;
+    background:var(--rosesoft); color:var(--text-hi); border-bottom:1px solid var(--rose); backdrop-filter:blur(10px); }
+  body.no-reveal .reveal, body.no-reveal .reveal .slides{ position:static; width:auto; height:auto; overflow:visible; }
+  body.no-reveal .reveal .slides section{ display:block; position:static; height:auto; }
+  body.no-reveal .sl{ position:relative; inset:auto; overflow:visible; padding:26px 5vw; border-bottom:1px solid var(--rule); }
+  body.no-reveal .sl-fit{ position:static; width:auto !important; transform:none !important; }
+  body.no-reveal .notes{ display:none; }
+  body.no-reveal #bPrev, body.no-reveal #bNext, body.no-reveal #bPos, body.no-reveal #bOver, body.no-reveal #bBoard{ display:none; }
+
+  /* ============================ 3.1 additions ============================ */
+  .pgno{ font-size:0.66rem; font-weight:600; color:var(--text-lo); background:var(--panel-2);
+    border:1px solid var(--rule); padding:0.2rem 0.5rem; border-radius:5px; white-space:nowrap; }
+  .figblock{ padding:16px 18px; }
+  .figrow3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .sol-fig{ padding:12px; }
+  .cm{ color:var(--text-lo); line-height:1.6; font-style:italic; margin:0.8rem 0; font-size:1.05rem; }
+  .title-grid.t31{ grid-template-columns:1fr 1.05fr; }
+  .title-grid.t31 h1{ margin-bottom:0; }
+
+  /* ---------- 3.3 additions ---------- */
+  .pgno{ font-size:0.68rem; font-weight:600; color:var(--text-lo); background:var(--panel-2);
+    border:1px solid var(--rule); padding:0.18rem 0.5rem; border-radius:5px; white-space:nowrap; }
+  .box-head .pgno{ margin-left:auto; }
+  .box.compact .box-body{ padding-top:0.3rem; padding-bottom:0.3rem; }
+  .proof-k{ font-family:'Fraunces',serif; font-weight:600; color:var(--gold); font-size:1.02rem; margin:0.6rem 0 0.2rem; }
+  .wseg{ display:flex; gap:8px; margin-bottom:12px; }
+  .tbtn.on{ border-color:var(--teal); background:var(--tealsoft); color:var(--teal); }
+</style>
+</head>
+<body class="booting">
+
+<div id="bootmsg">Loading Section 3.3 …</div>
+<div id="failmsg">reveal.js could not be loaded, so the lesson is shown as one long page. Check the internet connection and reload to get the slides back.</div>
+
+<div class="reveal">
+<div class="slides">
+<section data-zmax="1" data-valign="center" data-item="Title">
+<div class="sl"><div class="sl-main"><div class="sl-fit">
+<div class="title-grid t31">
+  <div>
+    <div class="kicker-line"><span class="dot"></span><span>Chapter 3 · Differentiation Rules</span></div>
+    <h1><span class="sec">Section 3.3</span>Derivatives of <em>Trigonometric Functions</em></h1>
+  </div>
+  <nav class="agenda" data-prevent-swipe><a href="#/1"><b>1</b>Derivatives as slopes</a><a href="#/2"><b>2</b>Sine and cosine</a><a href="#/3"><b>3</b>tan, sec, csc and cot</a><a href="#/4"><b>4</b>Slope of the tangent line</a><a href="#/5"><b>5</b>Challenging and Communicate</a></nav>
+</div>
+<div class="title-foot"><span>Examples {1, 2} · Related {3} · Exercises {35} · Challenging {1} · Communicate {4}</span><span class="keys"><span><kbd>Space</kbd>next step</span><span><kbd>↑ ↓</kbd>inside a block</span><span><kbd>← →</kbd>between blocks</span><span><kbd>W</kbd>board</span><span><kbd>T</kbd>light / dark</span><span><kbd>Esc</kbd>overview</span><span><kbd>S</kbd>notes</span><span><kbd>F</kbd>full screen</span></span></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">التنقل: Space للخطوة التالية · ↑ ↓ داخل الكتلة · ← → بين الكتل · W السبورة · T الوضع الغامق/الفاتح · Esc نظرة عامة · F ملء الشاشة.</div></aside>
+</section>
+<section data-zmax="1.0" data-valign="center" data-item="Interactive 1">
+<div class="sl"><div class="sl-top"><span class="num">1</span><span class="bt">Derivatives as slopes</span><span class="line"></span><span class="it">Interactive 1</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass widget" data-prevent-swipe>
+<div class="widget-head"><span class="wtag">Interactive 1</span><h3>The slope of the tangent to $y=f(x)$ draws the graph of $f'(x)$</h3></div>
+<div class="wgrid">
+<div>
+<div class="plot-host" id="w1-plot"></div>
+<div class="plot-host" id="w1-slope" style="margin-top:10px"></div>
+<div class="caption" id="w1-cap">Top: $y=f(x)$ and its tangent at $P$ · Bottom: the slope of that tangent, plotted at the same $x$</div>
+</div>
+<div>
+<div class="seg wseg"><button class="tbtn on" id="w1-sin">$f(x)=\sin x$</button><button class="tbtn" id="w1-cos">$f(x)=\cos x$</button></div>
+<div class="ctrl"><label>$x=$</label><input id="w1-a" type="range" min="-6.2832" max="6.2832" step="0.01" value="-6.2832"/><span class="val" id="w1-av">—</span></div>
+<dl class="readout">
+<dt>$f(x)$</dt><dd id="w1-f">—</dd>
+<dt>slope of the tangent at $P$</dt><dd id="w1-m">—</dd>
+<dt id="w1-dn">$\cos x$</dt><dd id="w1-d">—</dd>
+</dl>
+<div class="verdict" id="w1-v">—</div>
+<div class="ctrl" style="margin-top:12px;flex-wrap:wrap;gap:8px">
+<button class="tbtn" id="w1-play">▶ Trace the slope</button>
+<button class="tbtn" id="w1-show">Show $f'(x)$</button>
+<button class="tbtn" id="w1-reset">Reset</button>
+</div>
+</div>
+</div>
+</div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">حرّك x أو اضغط Trace: النقطة الحمراء تحت = ميل المماس فوق، وأثرها يرسم منحنى cos x. اضغط Show f′(x) لتأكيد الانطباق. زر cos x يعيد التجربة فيرسم الميل منحنى −sin x (نظرية 3.3.2). عند القمم والقيعان المماس أفقي والميل صفر.</div></aside>
+</section>
+<section>
+<section data-zmax="1.15" data-valign="top" data-item="Theorem 3.3.1 · 1/2">
+<div class="sl"><div class="sl-top"><span class="num">2</span><span class="bt">Sine and cosine</span><span class="line"></span><span class="it">Theorem 3.3.1 · 1/2</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm"><div class="box-head"><span class="box-kind">Theorem 3.3.1</span><span class="box-name">Derivative of the sine function</span><span class="pgno">p. 215</span></div><div class="box-body">$$\frac{d}{dx}(\sin x)=\cos x$$</div></div><div class="work"><div class="sol"><div class="proof-k">Proof</div><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">From the limit definition of the derivative, we have</span><span class="sm">$$\frac{d}{dx}(\sin x)=\lim_{h\to0}\frac{\sin(x+h)-\sin x}{h}$$</span></li><li class="fragment" data-fragment-index="1"><span class="sx">Using the identity $\;\sin(a+b)=\sin a\cos b+\cos a\sin b$, we have</span><span class="sm">$$\frac{d}{dx}(\sin x)=\lim_{h\to0}\frac{\sin x\cos(h)+\cos x\sin(h)-\sin x}{h}$$</span><span class="sm fragment" data-fragment-index="2">$$=\lim_{h\to0}\frac{\sin x\cos(h)-\sin x+\cos x\sin(h)}{h}$$</span><span class="sm fragment" data-fragment-index="3">$$=\lim_{h\to0}\frac{\sin x\big(\cos(h)-1\big)+\cos x\sin(h)}{h}$$</span></li></ol></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإثبات خطوة بخطوة — عدد الضغطات: 4.</div></aside>
+</section>
+<section data-zmax="1.15" data-valign="top" data-item="Theorem 3.3.1 · 2/2">
+<div class="sl"><div class="sl-top"><span class="num">2</span><span class="bt">Sine and cosine</span><span class="line"></span><span class="it">Theorem 3.3.1 · 2/2</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm compact"><div class="box-head"><span class="box-kind">Theorem 3.3.1</span><span class="box-name">Derivative of the sine function</span><span class="pgno">p. 215</span></div><div class="box-body">$$\frac{d}{dx}(\sin x)=\cos x$$</div></div><div class="work"><div class="sol"><div class="proof-k">Proof (continued)</div><ol class="steps" style="counter-reset:st 4"><li class="fragment" data-fragment-index="0"><span class="sm">$$=\lim_{h\to0}\frac{\sin x\big(\cos(h)-1\big)}{h}+\lim_{h\to0}\frac{\cos x\sin(h)}{h}$$</span><span class="sm fragment" data-fragment-index="1">$$=\sin x\lim_{h\to0}\frac{\cos(h)-1}{h}+\cos x\lim_{h\to0}\frac{\sin(h)}{h}$$</span></li><li class="fragment" data-fragment-index="2"><span class="sx">Recall from Theorem 2.2.3 that</span><span class="sm">$$\lim_{h\to0}\frac{\cos(h)-1}{h}=0\qquad\text{and}\qquad\lim_{h\to0}\frac{\sin(h)}{h}=1$$</span></li><li class="fragment" data-fragment-index="3"><span class="sx">Thus,</span><span class="sm">$$\frac{d}{dx}(\sin x)=\sin x(0)+\cos x(1)=\cos x$$</span></li></ol></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإثبات خطوة بخطوة — عدد الضغطات: 4.</div></aside>
+</section>
+<section data-zmax="1.4" data-valign="center" data-item="Theorem 3.3.2">
+<div class="sl"><div class="sl-top"><span class="num">2</span><span class="bt">Sine and cosine</span><span class="line"></span><span class="it">Theorem 3.3.2</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm"><div class="box-head"><span class="box-kind">Theorem 3.3.2</span><span class="box-name">Derivative of the cosine function</span><span class="pgno">p. 216</span></div><div class="box-body">$$\frac{d}{dx}(\cos x)=-\sin x$$<p class="sub">Applying similar techniques used in the proof of Theorem 3.3.1, we can prove Theorem 3.3.2 (see Exercise 35).</p></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">نص النظرية — بدون إثبات في هذا الجزء.</div></aside>
+</section>
+<section data-zmax="1.3" data-valign="top" data-item="Exercise 35 · 1/2">
+<div class="sl"><div class="sl-top"><span class="num">2</span><span class="bt">Sine and cosine</span><span class="line"></span><span class="it">Exercise 35 · 1/2</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-exer">Exercise 35</span><span class="pgno">p. 222</span></span><div class="prob-q"><span class="qt">Proof of Theorem 3.3.2</span><span class="qb">Apply similar methods used in Theorem 3.3.1 to show that $\;\dfrac{d}{dx}(\cos x)=-\sin x$.</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">From the limit definition of the derivative, we have</span><span class="sm">$$\frac{d}{dx}(\cos x)=\lim_{h\to0}\frac{\cos(x+h)-\cos x}{h}$$</span></li><li class="fragment" data-fragment-index="1"><span class="sx">Using the identity $\;\cos(a+b)=\cos a\cos b-\sin a\sin b$, we have</span><span class="sm">$$\frac{d}{dx}(\cos x)=\lim_{h\to0}\frac{\cos x\cos(h)-\sin x\sin(h)-\cos x}{h}$$</span></li></ol></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الكتاب لا يعرض خطوات الحل؛ الخطوات مكتوبة بنفس أسلوب الكتاب. عدد الضغطات: 2.</div></aside>
+</section>
+<section data-zmax="1.2" data-valign="top" data-item="Exercise 35 · 2/2">
+<div class="sl"><div class="sl-top"><span class="num">2</span><span class="bt">Sine and cosine</span><span class="line"></span><span class="it">Exercise 35 · 2/2</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-exer">Exercise 35</span><span class="pgno">p. 222</span></span><div class="prob-q"><span class="qt">Proof of Theorem 3.3.2</span><span class="qb">Apply similar methods used in Theorem 3.3.1 to show that $\;\dfrac{d}{dx}(\cos x)=-\sin x$.</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 2"><li class="fragment" data-fragment-index="0"><span class="sm">$$=\lim_{h\to0}\frac{\cos x\big(\cos(h)-1\big)-\sin x\sin(h)}{h}$$</span><span class="sm fragment" data-fragment-index="1">$$=\cos x\lim_{h\to0}\frac{\cos(h)-1}{h}-\sin x\lim_{h\to0}\frac{\sin(h)}{h}$$</span></li><li class="fragment" data-fragment-index="2"><span class="sx">Using Theorem 2.2.3,</span><span class="sm">$$\frac{d}{dx}(\cos x)=\cos x(0)-\sin x(1)=-\sin x$$</span></li></ol><div class="answer fragment" data-fragment-index="3"><span class="k">Answer</span> $\dfrac{d}{dx}(\cos x)=-\sin x$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الكتاب لا يعرض خطوات الحل؛ الخطوات مكتوبة بنفس أسلوب الكتاب. الإجابة: $\dfrac{d}{dx}(\cos x)=-\sin x$ — عدد الضغطات: 4.</div></aside>
+</section>
+<section data-zmax="1.3" data-valign="top" data-item="Example 1(a)">
+<div class="sl"><div class="sl-top"><span class="num">2</span><span class="bt">Sine and cosine</span><span class="line"></span><span class="it">Example 1(a)</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-ex">Example 1(a)</span><span class="pgno">p. 216</span></span><div class="prob-q"><span class="qt">Product rule</span><span class="qb">Find the derivative of $\;y=x\sin x$</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Using product rule, we have</span><span class="sm">$$\frac{dy}{dx}=\frac{d}{dx}(x\sin x)=x\frac{d}{dx}(\sin x)+\sin x\frac{d}{dx}(x)=x\cos x+\sin x$$</span></li></ol><div class="answer fragment" data-fragment-index="1"><span class="k">Answer</span> $y'=x\cos x+\sin x$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإجابة: $y'=x\cos x+\sin x$ — عدد الضغطات: 2.</div></aside>
+</section>
+<section data-zmax="1.2" data-valign="top" data-item="Example 1(b)">
+<div class="sl"><div class="sl-top"><span class="num">2</span><span class="bt">Sine and cosine</span><span class="line"></span><span class="it">Example 1(b)</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-ex">Example 1(b)</span><span class="pgno">p. 216</span></span><div class="prob-q"><span class="qt">Quotient rule</span><span class="qb">Find the derivative of $\;y=\dfrac{1+\sin x}{x+\cos x}$</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Using quotient rule, we have</span><span class="sm">$$\frac{dy}{dx}=\frac{d}{dx}\left(\frac{1+\sin x}{x+\cos x}\right)$$</span><span class="sm fragment" data-fragment-index="1">$$=\frac{(x+\cos x)\frac{d}{dx}(1+\sin x)-(1+\sin x)\frac{d}{dx}(x+\cos x)}{(x+\cos x)^{2}}$$</span><span class="sm fragment" data-fragment-index="2">$$=\frac{(x+\cos x)\cos x-(1+\sin x)(1-\sin x)}{(x+\cos x)^{2}}=\frac{x\cos x+\cos^{2}x-\left(1-\sin^{2}x\right)}{(x+\cos x)^{2}}$$</span><span class="sm fragment" data-fragment-index="3">$$=\frac{x\cos x+\cos^{2}x-\cos^{2}x}{(x+\cos x)^{2}}=\frac{x\cos x}{(x+\cos x)^{2}}$$</span></li></ol><div class="answer fragment" data-fragment-index="4"><span class="k">Answer</span> $y'=\dfrac{x\cos x}{(x+\cos x)^{2}}$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإجابة: $y'=\dfrac{x\cos x}{(x+\cos x)^{2}}$ — عدد الضغطات: 5.</div></aside>
+</section>
+</section>
+<section>
+<section data-zmax="1.15" data-valign="top" data-item="Theorem 3.3.3">
+<div class="sl"><div class="sl-top"><span class="num">3</span><span class="bt">tan, sec, csc and cot</span><span class="line"></span><span class="it">Theorem 3.3.3</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm"><div class="box-head"><span class="box-kind">Theorem 3.3.3</span><span class="box-name">Derivative of the tangent function</span><span class="pgno">p. 217</span></div><div class="box-body">$$\frac{d}{dx}(\tan x)=\sec^{2}x$$</div></div><div class="work"><div class="sol"><div class="proof-k">Proof</div><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Using quotient rule, we have</span><span class="sm">$$\frac{d}{dx}(\tan x)=\frac{d}{dx}\left(\frac{\sin x}{\cos x}\right)$$</span><span class="sm fragment" data-fragment-index="1">$$=\frac{\cos x\frac{d}{dx}(\sin x)-\sin x\frac{d}{dx}(\cos x)}{\cos^{2}x}$$</span><span class="sm fragment" data-fragment-index="2">$$=\frac{\cos x(\cos x)-\sin x(-\sin x)}{\cos^{2}x}=\frac{\cos^{2}x+\sin^{2}x}{\cos^{2}x}$$</span><span class="sm fragment" data-fragment-index="3">$$=\frac{1}{\cos^{2}x}=\left(\frac{1}{\cos x}\right)^{2}=\sec^{2}x$$</span></li></ol></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإثبات خطوة بخطوة — عدد الضغطات: 4.</div></aside>
+</section>
+<section data-zmax="1.4" data-valign="center" data-item="Theorem 3.3.4">
+<div class="sl"><div class="sl-top"><span class="num">3</span><span class="bt">tan, sec, csc and cot</span><span class="line"></span><span class="it">Theorem 3.3.4</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm"><div class="box-head"><span class="box-kind">Theorem 3.3.4</span><span class="box-name">Derivatives of secant, cosecant and cotangent</span><span class="pgno">p. 217</span></div><div class="box-body">$$\text{a. }\ \frac{d}{dx}(\sec x)=\sec x\tan x\qquad\text{b. }\ \frac{d}{dx}(\csc x)=-\csc x\cot x\qquad\text{c. }\ \frac{d}{dx}(\cot x)=-\csc^{2}x$$<p class="sub">Again, using the quotient rule, we can derive the derivatives of secant, cosecant and cotangent functions based on their sine and cosine definitions.</p></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">نص النظرية — بدون إثبات في هذا الجزء.</div></aside>
+</section>
+<section data-zmax="1.15" data-valign="top" data-item="Theorem 3.3.4 (a)">
+<div class="sl"><div class="sl-top"><span class="num">3</span><span class="bt">tan, sec, csc and cot</span><span class="line"></span><span class="it">Theorem 3.3.4 (a)</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm"><div class="box-head"><span class="box-kind">Theorem 3.3.4 (a)</span><span class="box-name">Proof</span><span class="pgno">p. 217</span></div><div class="box-body">$$\frac{d}{dx}(\sec x)=\sec x\tan x$$</div></div><div class="work"><div class="sol"><div class="proof-k">Proof</div><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Since $\;\sec x=\dfrac{1}{\cos x}$, using quotient rule, we have</span><span class="sm">$$\frac{d}{dx}(\sec x)=\frac{d}{dx}\left(\frac{1}{\cos x}\right)$$</span><span class="sm fragment" data-fragment-index="1">$$=\frac{\cos x\frac{d}{dx}(1)-(1)\frac{d}{dx}(\cos x)}{\cos^{2}x}=\frac{-(-\sin x)}{\cos^{2}x}$$</span><span class="sm fragment" data-fragment-index="2">$$=\frac{\sin x}{\cos^{2}x}=\frac{1}{\cos x}\cdot\frac{\sin x}{\cos x}=\sec x\tan x$$</span></li></ol></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإثبات خطوة بخطوة — عدد الضغطات: 3.</div></aside>
+</section>
+<section data-zmax="1.15" data-valign="top" data-item="Theorem 3.3.4 (b)">
+<div class="sl"><div class="sl-top"><span class="num">3</span><span class="bt">tan, sec, csc and cot</span><span class="line"></span><span class="it">Theorem 3.3.4 (b)</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm"><div class="box-head"><span class="box-kind">Theorem 3.3.4 (b)</span><span class="box-name">Proof</span><span class="pgno">p. 218</span></div><div class="box-body">$$\frac{d}{dx}(\csc x)=-\csc x\cot x$$</div></div><div class="work"><div class="sol"><div class="proof-k">Proof</div><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Since $\;\csc x=\dfrac{1}{\sin x}$, using quotient rule, we have</span><span class="sm">$$\frac{d}{dx}(\csc x)=\frac{d}{dx}\left(\frac{1}{\sin x}\right)$$</span><span class="sm fragment" data-fragment-index="1">$$=\frac{\sin x\frac{d}{dx}(1)-(1)\frac{d}{dx}(\sin x)}{\sin^{2}x}$$</span><span class="sm fragment" data-fragment-index="2">$$=-\frac{\cos x}{\sin^{2}x}=-\frac{1}{\sin x}\cdot\frac{\cos x}{\sin x}=-\csc x\cot x$$</span></li></ol></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإثبات خطوة بخطوة — عدد الضغطات: 3.</div></aside>
+</section>
+<section data-zmax="1.15" data-valign="top" data-item="Theorem 3.3.4 (c)">
+<div class="sl"><div class="sl-top"><span class="num">3</span><span class="bt">tan, sec, csc and cot</span><span class="line"></span><span class="it">Theorem 3.3.4 (c)</span></div><div class="sl-main"><div class="sl-fit">
+<div class="box thm"><div class="box-head"><span class="box-kind">Theorem 3.3.4 (c)</span><span class="box-name">Proof</span><span class="pgno">p. 218</span></div><div class="box-body">$$\frac{d}{dx}(\cot x)=-\csc^{2}x$$</div></div><div class="work"><div class="sol"><div class="proof-k">Proof</div><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Since $\;\cot x=\dfrac{\cos x}{\sin x}$, using quotient rule, we have</span><span class="sm">$$\frac{d}{dx}(\cot x)=\frac{d}{dx}\left(\frac{\cos x}{\sin x}\right)$$</span><span class="sm fragment" data-fragment-index="1">$$=\frac{\sin x\frac{d}{dx}(\cos x)-\cos x\frac{d}{dx}(\sin x)}{\sin^{2}x}$$</span><span class="sm fragment" data-fragment-index="2">$$=\frac{\sin x(-\sin x)-\cos x(\cos x)}{\sin^{2}x}=\frac{-\sin^{2}x-\cos^{2}x}{\sin^{2}x}$$</span><span class="sm fragment" data-fragment-index="3">$$=\frac{-\left(\sin^{2}x+\cos^{2}x\right)}{\sin^{2}x}=\frac{-1}{\sin^{2}x}=-\csc^{2}x$$</span></li></ol></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإثبات خطوة بخطوة — عدد الضغطات: 4.</div></aside>
+</section>
+<section data-zmax="1.2" data-valign="top" data-item="Example 2(a)">
+<div class="sl"><div class="sl-top"><span class="num">3</span><span class="bt">tan, sec, csc and cot</span><span class="line"></span><span class="it">Example 2(a)</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-ex">Example 2(a)</span><span class="pgno">p. 218</span></span><div class="prob-q"><span class="qt">Sum and difference</span><span class="qb">Find the derivative of $\;y=2x^{2}-3\cot x+2\sec x$</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Using Theorem 3.2.4, we have</span><span class="sm">$$\frac{d}{dx}\left(2x^{2}-3\cot x+2\sec x\right)=\frac{d}{dx}\left(2x^{2}\right)-\frac{d}{dx}(3\cot x)+\frac{d}{dx}(2\sec x)$$</span><span class="sm fragment" data-fragment-index="1">$$=4x-3\left(-\csc^{2}x\right)+2(\sec x\tan x)$$</span><span class="sm fragment" data-fragment-index="2">$$=4x+3\csc^{2}x+2\sec x\tan x$$</span></li></ol><div class="answer fragment" data-fragment-index="3"><span class="k">Answer</span> $y'=4x+3\csc^{2}x+2\sec x\tan x$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإجابة: $y'=4x+3\csc^{2}x+2\sec x\tan x$ — عدد الضغطات: 4.</div></aside>
+</section>
+<section data-zmax="1.2" data-valign="top" data-item="Example 2(b)">
+<div class="sl"><div class="sl-top"><span class="num">3</span><span class="bt">tan, sec, csc and cot</span><span class="line"></span><span class="it">Example 2(b)</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-ex">Example 2(b)</span><span class="pgno">p. 218</span></span><div class="prob-q"><span class="qt">Quotient rule</span><span class="qb">Find the derivative of $\;y=\dfrac{\tan x}{1+\csc x}$</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sx">Using the quotient rule, we have</span><span class="sm">$$\frac{d}{dx}\left(\frac{\tan x}{1+\csc x}\right)=\frac{(1+\csc x)\frac{d}{dx}(\tan x)-\tan x\frac{d}{dx}(1+\csc x)}{(1+\csc x)^{2}}$$</span><span class="sm fragment" data-fragment-index="1">$$=\frac{(1+\csc x)\sec^{2}x-\tan x(-\csc x\cot x)}{(1+\csc x)^{2}}$$</span><span class="sm fragment" data-fragment-index="2">$$=\frac{\sec^{2}x+\csc x\sec^{2}x+\csc x}{(1+\csc x)^{2}}$$</span></li></ol><div class="answer fragment" data-fragment-index="3"><span class="k">Answer</span> $y'=\dfrac{\sec^{2}x+\csc x\sec^{2}x+\csc x}{(1+\csc x)^{2}}$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الإجابة: $y'=\dfrac{\sec^{2}x+\csc x\sec^{2}x+\csc x}{(1+\csc x)^{2}}$ — عدد الضغطات: 4.</div></aside>
+</section>
+</section>
+<section data-zmax="1.3" data-valign="top" data-item="Related Problem 3">
+<div class="sl"><div class="sl-top"><span class="num">4</span><span class="bt">Slope of the tangent line</span><span class="line"></span><span class="it">Related Problem 3</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-rel">Related Problem 3</span><span class="pgno">p. 219</span></span><div class="prob-q"><span class="qt">Slope of the tangent line</span><span class="qb">Find the slope of the tangent line to the graph of $\;y=\csc x-2\cos x\;$ at $\;x=\dfrac{\pi}{6}$.</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sm">$$\frac{dy}{dx}=\frac{d}{dx}(\csc x)-2\frac{d}{dx}(\cos x)=-\csc x\cot x+2\sin x$$</span></li><li class="fragment" data-fragment-index="1"><span class="sx">The slope of the tangent line to the graph of $y$ at $x=\dfrac{\pi}{6}$ is:</span><span class="sm">$$m=\left.\frac{dy}{dx}\right|_{x=\frac{\pi}{6}}=-\csc\frac{\pi}{6}\cot\frac{\pi}{6}+2\sin\frac{\pi}{6}=-(2)\left(\sqrt3\right)+2\left(\frac12\right)=-2\sqrt3+1$$</span></li></ol><div class="answer fragment" data-fragment-index="2"><span class="k">Answer</span> $m=-2\sqrt3+1$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الكتاب لا يعرض خطوات الحل؛ الخطوات مكتوبة بنفس أسلوب الكتاب. الإجابة: $m=-2\sqrt3+1$ — عدد الضغطات: 3.</div></aside>
+</section>
+<section>
+<section data-zmax="1.2" data-valign="top" data-item="Challenging Problem 1">
+<div class="sl"><div class="sl-top"><span class="num">5</span><span class="bt">Challenging and Communicate</span><span class="line"></span><span class="it">Challenging Problem 1</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-ch">Challenging Problem 1</span><span class="pgno">p. 223</span></span><div class="prob-q"><span class="qt">A shifted cosine</span><span class="qb">Given that $f(x)=\cos(x+h)$, where $h$ is constant, show that $f'(x)=-\sin(x+h)$.</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sm">$$f'(x)=\lim_{t\to0}\frac{f(x+t)-f(x)}{t}=\lim_{t\to0}\frac{\cos[(x+t)+h]-\cos(x+h)}{t}$$</span><span class="sm fragment" data-fragment-index="1">$$=\lim_{t\to0}\frac{\cos(x+h)\cos t-\sin(x+h)\sin t-\cos(x+h)}{t}$$</span><span class="sm fragment" data-fragment-index="2">$$=\cos(x+h)\underbrace{\lim_{t\to0}\frac{\cos t-1}{t}}_{\to\,0}-\sin(x+h)\underbrace{\lim_{t\to0}\frac{\sin t}{t}}_{\to\,1}$$</span><span class="sm fragment" data-fragment-index="3">$$=-\sin(x+h)$$</span></li></ol><div class="answer fragment" data-fragment-index="4"><span class="k">Answer</span> $f'(x)=-\sin(x+h)$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الحل مطابق لصورة الحل المرسلة. الإجابة: $f'(x)=-\sin(x+h)$ — عدد الضغطات: 5.</div></aside>
+</section>
+<section data-zmax="1.3" data-valign="top" data-item="Communicate 4">
+<div class="sl"><div class="sl-top"><span class="num">5</span><span class="bt">Challenging and Communicate</span><span class="line"></span><span class="it">Communicate 4</span></div><div class="sl-main"><div class="sl-fit">
+<div class="glass q"><span class="badge-wrap"><span class="prob-badge b-ch">Communicate 4</span><span class="pgno">p. 223</span></span><div class="prob-q"><span class="qt">Why is the derivative of tan x equal to sec² x?</span><span class="qb">Explain why the derivative of $\tan x$ is $\sec^{2}x$. Use the quotient rule to derive it.</span></div></div><div class="work"><div class="sol"><ol class="steps" style="counter-reset:st 0"><li class="fragment" data-fragment-index="0"><span class="sm">$$\frac{d}{dx}(\tan x)=\frac{d}{dx}\left(\frac{\sin x}{\cos x}\right)=\frac{\cos x\cos x-\sin x(-\sin x)}{(\cos x)^{2}}=\frac{\sin^{2}x+\cos^{2}x}{(\cos x)^{2}}$$</span><span class="sm fragment" data-fragment-index="1">$$=\frac{1}{(\cos x)^{2}}=\sec^{2}x$$</span></li></ol><div class="answer fragment" data-fragment-index="2"><span class="k">Answer</span> $\dfrac{d}{dx}(\tan x)=\sec^{2}x$</div></div></div>
+</div></div></div>
+<aside class="notes"><div dir="rtl">الحل مطابق لصورة الحل المرسلة. الإجابة: $\dfrac{d}{dx}(\tan x)=\sec^{2}x$ — عدد الضغطات: 3.</div></aside>
+</section>
+</section>
+</div>
+</div>
+
+<div id="bar">
+  <button class="ub sq" id="bPrev" title="Previous step (Shift + Space)" aria-label="Previous step"><svg viewBox="0 0 24 24"><polyline points="15 5 8 12 15 19"/></svg></button>
+  <button class="ub sq" id="bNext" title="Next step (Space)" aria-label="Next step"><svg viewBox="0 0 24 24"><polyline points="9 5 16 12 9 19"/></svg></button>
+  <span id="bPos"><b>Title</b></span>
+  <button class="ub" id="bBoard" title="Whiteboard (W)"><svg viewBox="0 0 24 24"><path d="M4 20l1.2-4.4L16.5 4.3a1.8 1.8 0 012.6 0l.6.6a1.8 1.8 0 010 2.6L8.4 18.8z"/><path d="M14.5 6.3l3.2 3.2"/></svg><span>Board</span></button>
+  <button class="ub sq" id="bOver" title="Overview of all slides (Esc)" aria-label="Overview"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/></svg></button>
+  <button class="ub sq" id="bFull" title="Full screen (F)" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  <button class="ub" id="themeBtn" title="Light / dark (T)" aria-label="Toggle theme"><svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24"><path d="M21 13.2A9 9 0 1 1 10.8 3a7 7 0 0 0 10.2 10.2z"/></svg><span class="t-light">Light</span><span class="t-dark">Dark</span></button>
+</div>
+
+<div id="board" class="over">
+  <canvas></canvas>
+  <div id="boardbar">
+    <div class="grp"><span class="sw on" data-tok="teal"></span><span class="sw" data-tok="gold"></span><span class="sw" data-tok="ink"></span><span class="sw" data-tok="rose"></span><span class="sw" data-tok="blue"></span></div>
+    <span class="sep"></span>
+    <div class="grp"><button class="ub sq szbtn on" data-w="2.5" aria-label="Pen size 1"><i style="width:0.3em;height:0.3em"></i></button><button class="ub sq szbtn" data-w="5" aria-label="Pen size 2"><i style="width:0.55em;height:0.55em"></i></button><button class="ub sq szbtn" data-w="10" aria-label="Pen size 3"><i style="width:0.9em;height:0.9em"></i></button></div>
+    <span class="sep"></span>
+    <div class="grp">
+      <button class="ub js-eraser">Eraser</button>
+      <button class="ub js-undo">Undo</button>
+      <button class="ub js-clear">Clear</button>
+    </div>
+    <span class="sep"></span>
+    <div class="seg">
+      <button class="ub js-over on" title="Write on top of the slide">Over slide</button>
+      <button class="ub js-page" title="A clean ruled page">Blank page</button>
+    </div>
+    <span class="sep"></span>
+    <div class="grp">
+      <button class="ub sq js-prev" title="Previous step" aria-label="Previous step"><svg viewBox="0 0 24 24"><polyline points="15 5 8 12 15 19"/></svg></button>
+      <button class="ub sq js-next" title="Next step" aria-label="Next step"><svg viewBox="0 0 24 24"><polyline points="9 5 16 12 9 19"/></svg></button>
+      <button class="ub js-close" title="Close the board (Esc)"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Close</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========================================================================
+   0 · THEME
+   ======================================================================== */
+const ROOT = document.documentElement;
+const PAL = {
+  dark:{ teal:'#2DD4BF', gold:'#F5B942', rose:'#FF6B8A', blue:'#60A5FA', green:'#4ADE80',
+         hi:'#EDEFF7', ink:'#EDEFF7', mute:'rgba(255,255,255,0.50)',
+         surface:'rgba(8,11,22,0.50)', grid:'rgba(255,255,255,0.055)',
+         axis:'rgba(255,255,255,0.35)', tick:'rgba(255,255,255,0.45)',
+         tickText:'rgba(255,255,255,0.40)', hole:'#0B0F1E' },
+  light:{ teal:'#0E9384', gold:'#B4780A', rose:'#D6336C', blue:'#2563EB', green:'#15803D',
+         hi:'#10141F', ink:'#10141F', mute:'rgba(15,23,42,0.50)',
+         surface:'rgba(255,255,255,0.70)', grid:'rgba(15,23,42,0.07)',
+         axis:'rgba(15,23,42,0.42)', tick:'rgba(15,23,42,0.50)',
+         tickText:'rgba(15,23,42,0.50)', hole:'#FFFFFF' }
+};
+let theme='dark';
+try{ theme = localStorage.getItem('lesson33-theme') || 'dark'; }catch(e){}
+ROOT.setAttribute('data-theme', theme);
+const P = () => PAL[theme];
+
+function hex2rgba(h,a){ const n=parseInt(h.slice(1),16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`; }
+function col(spec, fb){
+  if(spec===undefined||spec===null) spec=fb;
+  if(typeof spec==='object'&&spec.t) return hex2rgba(P()[spec.t], spec.a);
+  if(typeof spec==='string'&&P()[spec]) return P()[spec];
+  return spec;
+}
+
+/* ========================================================================
+   1 · SVG PLOT HELPER
+   ======================================================================== */
+const NS='http://www.w3.org/2000/svg';
+
+function plot(host, o){
+  if(typeof host==='string') host=document.getElementById(host);
+  if(!host) return null;
+  const W=o.w||520, H=o.h||420;
+  const [x0,x1]=o.xr, [y0,y1]=o.yr;
+  const X=x=>(x-x0)/(x1-x0)*W, Y=y=>H-(y-y0)/(y1-y0)*H;
+  const p=P();
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="${NS}" font-family="Inter, sans-serif">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="${p.surface}" rx="10"/>`;
+
+  (o.bands||[]).forEach(b=>{
+    const xa=X(Math.min(b.x0,b.x1)), xb=X(Math.max(b.x0,b.x1));
+    s+=`<rect x="${xa}" y="0" width="${Math.max(0,xb-xa)}" height="${H}" fill="${col(b.color,{t:'gold',a:0.10})}"/>`;
+  });
+
+  const gs=o.gridStep||1;
+  for(let x=Math.ceil(x0/gs)*gs; x<=x1+1e-9; x+=gs)
+    s+=`<line x1="${X(x).toFixed(1)}" y1="0" x2="${X(x).toFixed(1)}" y2="${H}" stroke="${p.grid}" stroke-width="1"/>`;
+  for(let y=Math.ceil(y0/gs)*gs; y<=y1+1e-9; y+=gs)
+    s+=`<line x1="0" y1="${Y(y).toFixed(1)}" x2="${W}" y2="${Y(y).toFixed(1)}" stroke="${p.grid}" stroke-width="1"/>`;
+
+  const ax = (y0<=0&&y1>=0) ? Y(0) : null;
+  const ay = (x0<=0&&x1>=0) ? X(0) : null;
+  if(ax!==null) s+=`<line x1="0" y1="${ax}" x2="${W}" y2="${ax}" stroke="${p.axis}" stroke-width="1.4"/>`;
+  if(ay!==null) s+=`<line x1="${ay}" y1="0" x2="${ay}" y2="${H}" stroke="${p.axis}" stroke-width="1.4"/>`;
+
+  const ts=o.tickStep||gs;
+  const baseY = ax!==null ? ax : H-16;
+  if(o.xTicks){
+    o.xTicks.forEach(t=>{
+      s+=`<line x1="${X(t.x)}" y1="${baseY-4}" x2="${X(t.x)}" y2="${baseY+4}" stroke="${p.tick}" stroke-width="1.2"/>`;
+      s+=`<text x="${X(t.x)}" y="${baseY+22}" fill="${p.tickText}" font-size="15" text-anchor="middle" font-style="italic">${t.text}</text>`;
+    });
+  } else if(ax!==null && o.noXTicks!==true){
+    for(let x=Math.ceil(x0/ts)*ts; x<=x1+1e-9; x+=ts){
+      if(Math.abs(x)<1e-9) continue;
+      s+=`<line x1="${X(x).toFixed(1)}" y1="${ax-4}" x2="${X(x).toFixed(1)}" y2="${ax+4}" stroke="${p.tick}" stroke-width="1.2"/>`;
+      s+=`<text x="${X(x).toFixed(1)}" y="${ax+20}" fill="${p.tickText}" font-size="14" text-anchor="middle">${+x.toFixed(2)}</text>`;
+    }
+  }
+  const baseX = ay!==null ? ay : 22;
+  if(o.yTicks){
+    o.yTicks.forEach(t=>{
+      s+=`<line x1="${baseX-4}" y1="${Y(t.y)}" x2="${baseX+4}" y2="${Y(t.y)}" stroke="${p.tick}" stroke-width="1.2"/>`;
+      s+=`<text x="${baseX-10}" y="${(Y(t.y)+3.5).toFixed(1)}" fill="${p.tickText}" font-size="15" text-anchor="end">${t.text}</text>`;
+    });
+  } else if(ay!==null && o.noYTicks!==true){
+    for(let y=Math.ceil(y0/ts)*ts; y<=y1+1e-9; y+=ts){
+      if(Math.abs(y)<1e-9) continue;
+      s+=`<line x1="${ay-4}" y1="${Y(y).toFixed(1)}" x2="${ay+4}" y2="${Y(y).toFixed(1)}" stroke="${p.tick}" stroke-width="1.2"/>`;
+      s+=`<text x="${ay-10}" y="${(Y(y)+3.5).toFixed(1)}" fill="${p.tickText}" font-size="14" text-anchor="end">${+y.toFixed(2)}</text>`;
+    }
+  }
+
+  if(o.axisNames!==false){
+    s+=`<text x="${W-8}" y="${(ax!==null?ax-8:H-6)}" fill="${p.mute}" font-size="16" font-style="italic" text-anchor="end">x</text>`;
+    s+=`<text x="${(ay!==null?ay+8:8)}" y="14" fill="${p.mute}" font-size="16" font-style="italic">y</text>`;
+  }
+
+  (o.guides||[]).forEach(g=>{
+    const c=col(g.color,'rose');
+    if(g.x!==undefined)
+      s+=`<line x1="${X(g.x)}" y1="${Y(g.yTo!==undefined?g.yTo:y0)}" x2="${X(g.x)}" y2="${Y(g.yFrom!==undefined?g.yFrom:y1)}" stroke="${c}" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.8"/>`;
+    if(g.y!==undefined)
+      s+=`<line x1="${X(g.xFrom!==undefined?g.xFrom:x0)}" y1="${Y(g.y)}" x2="${X(g.xTo!==undefined?g.xTo:x1)}" y2="${Y(g.y)}" stroke="${c}" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.8"/>`;
+  });
+
+  const PADY=(y1-y0)*0.25;
+  (o.curves||[]).forEach(c=>{
+    const n=c.n||700; let segs=[], cur=[];
+    const push=(px,py,yv)=>{
+      if(!isFinite(px)||!isFinite(py)||!isFinite(yv)||yv<y0-PADY||yv>y1+PADY){
+        if(cur.length>1) segs.push(cur); cur=[]; return;
+      }
+      cur.push(px.toFixed(1)+','+py.toFixed(1));
+    };
+    if(c.param){
+      const {t0,t1}=c.param;
+      for(let i=0;i<=n;i++){ const t=t0+(t1-t0)*i/n; const xv=c.param.x(t), yv=c.param.y(t); push(X(xv),Y(yv),yv); }
+    } else {
+      const a=c.from!==undefined?c.from:x0, b=c.to!==undefined?c.to:x1;
+      for(let i=0;i<=n;i++){ const xv=a+(b-a)*i/n, yv=c.f(xv); push(X(xv),Y(yv),yv); }
+    }
+    if(cur.length>1) segs.push(cur);
+    const stroke=col(c.color,'teal');
+    segs.forEach(seg=>{
+      s+=`<polyline points="${seg.join(' ')}" fill="none" stroke="${stroke}" stroke-width="${c.w||2.4}" stroke-linecap="round" stroke-linejoin="round"${c.dash?` stroke-dasharray="${c.dash}"`:''}${c.opacity?` opacity="${c.opacity}"`:''}/>`;
+    });
+  });
+
+  (o.polys||[]).forEach(pl=>{
+    const pts=pl.pts.map(q=>X(q[0]).toFixed(1)+','+Y(q[1]).toFixed(1)).join(' ');
+    s+=`<polyline points="${pts}" fill="none" stroke="${col(pl.color,'blue')}" stroke-width="${pl.w||2.8}" stroke-linecap="round" stroke-linejoin="round"${pl.dash?` stroke-dasharray="${pl.dash}"`:''}/>`;
+  });
+
+  (o.dots||[]).forEach(d=>{
+    const r=d.r||5.5, c=col(d.color,'teal');
+    if(d.open) s+=`<circle cx="${X(d.x)}" cy="${Y(d.y)}" r="${r}" fill="${p.hole}" stroke="${c}" stroke-width="2.4"/>`;
+    else       s+=`<circle cx="${X(d.x)}" cy="${Y(d.y)}" r="${r}" fill="${c}"/>`;
+  });
+
+  (o.labels||[]).forEach(l=>{
+    s+=`<text x="${X(l.x)+(l.dx||0)}" y="${Y(l.y)+(l.dy||0)}" fill="${col(l.color,'hi')}" font-size="${Math.round((l.size||12)*1.4)}" text-anchor="${l.anchor||'middle'}"${l.italic?' font-style="italic"':''}>${l.text}</text>`;
+  });
+
+  s+=`</svg>`;
+  host.innerHTML=s;
+  return {svg:host.firstChild, X, Y, W, H};
+}
+
+const FIGS = {};
+
+
+
+/* ========================================================================
+   3 · INTERACTIVE 1 — the slope of sin x traces cos x
+   ======================================================================== */
+const W1 = { fn:'sin', trail:[], show:false, anim:null };
+const W1F = { sin:{f:Math.sin, d:Math.cos, dn:'\\cos x', dl:'y = cos x', fl:'y = sin x'},
+              cos:{f:Math.cos, d:x=>-Math.sin(x), dn:'-\\sin x', dl:'y = −sin x', fl:'y = cos x'} };
+const PI = Math.PI;
+const W1TICKS = [-2,-1.5,-1,-0.5,0.5,1,1.5,2].map(k=>({x:k*PI,
+  text:({'-2':'−2π','-1.5':'−3π/2','-1':'−π','-0.5':'−π/2','0.5':'π/2','1':'π','1.5':'3π/2','2':'2π'})[String(k)]}));
+function piLabel(a){
+  const k=a/PI, r=Math.round(k*4)/4;
+  return (Math.abs(k-r)<0.004 ? (r===0?'0':((r<0?'−':'')+(Math.abs(r)===1?'':String(Math.abs(r)))+'π')) : a.toFixed(2));
+}
+function drawW1(){
+  const F=W1F[W1.fn], a=parseFloat(document.getElementById('w1-a').value);
+  const fa=F.f(a), m=F.d(a);
+  const base={w:760,h:250, xr:[-6.9,6.9], yr:[-1.55,1.55], gridStep:PI/2, noXTicks:true, xTicks:W1TICKS, yTicks:[{y:1,text:'1'},{y:-1,text:'−1'}]};
+  plot('w1-plot',{...base,
+    curves:[{f:F.f, color:'teal', w:2.8, n:600},
+            {f:x=>fa+m*(x-a), from:a-1.3, to:a+1.3, color:'gold', w:2.6, n:10}],
+    dots:[{x:a,y:fa,color:'blue',r:7}],
+    labels:[{x:-6.6,y:1.25,text:F.fl,color:'teal',size:11,italic:true,anchor:'start'},
+            {x:a,y:fa,text:'P',color:'blue',size:12,dy:-14}]});
+  const tr=W1.trail;
+  plot('w1-slope',{...base,
+    polys:(tr.length>1?[{pts:tr, color:'rose', w:3.2}]:[])
+      .concat(W1.show?[{pts:Array.from({length:241},(_,i)=>{const x=-6.9+13.8*i/240; return [x,F.d(x)];}), color:'gold', w:2.4, dash:'8 7'}]:[]),
+    dots:[{x:a,y:m,color:'rose',r:7}],
+    labels:[{x:-6.6,y:1.25,text:'slope of the tangent',color:'rose',size:11,anchor:'start'}]
+      .concat(W1.show?[{x:6.6,y:1.25,text:F.dl,color:'gold',size:11,italic:true,anchor:'end'}]:[])});
+  document.getElementById('w1-av').textContent=piLabel(a);
+  document.getElementById('w1-f').textContent=fa.toFixed(3);
+  document.getElementById('w1-m').textContent=m.toFixed(3);
+  document.getElementById('w1-d').textContent=F.d(a).toFixed(3);
+  const v=document.getElementById('w1-v');
+  if(Math.abs(m)<0.02){ v.textContent='Horizontal tangent: slope = 0 — the slope graph crosses the x-axis here'; v.className='verdict ok'; }
+  else { v.textContent=(m>0?'f is rising: slope > 0':'f is falling: slope < 0')+' — the slope equals '+(W1.fn==='sin'?'cos x':'−sin x'); v.className='verdict'; }
+}
+function addTrail(){
+  const a=parseFloat(document.getElementById('w1-a').value), m=W1F[W1.fn].d(a);
+  const tr=W1.trail;
+  if(!tr.length || a>tr[tr.length-1][0]) tr.push([a,m]);
+}
+function stopW1(){ if(W1.anim){ cancelAnimationFrame(W1.anim); W1.anim=null; } }
+function playW1(){
+  stopW1(); W1.trail=[];
+  const el=document.getElementById('w1-a'), T=6000, t0=performance.now();
+  const step=now=>{
+    const t=Math.min(1,(now-t0)/T);
+    el.value=(-2*PI+4*PI*t).toFixed(4); addTrail(); drawW1();
+    W1.anim = t<1 ? requestAnimationFrame(step) : null;
+  };
+  W1.anim=requestAnimationFrame(step);
+}
+function setFn(fn){
+  stopW1(); W1.fn=fn; W1.trail=[]; W1.show=false;
+  document.getElementById('w1-sin').classList.toggle('on',fn==='sin');
+  document.getElementById('w1-cos').classList.toggle('on',fn==='cos');
+  document.getElementById('w1-show').classList.remove('on');
+  const dn=document.getElementById('w1-dn');
+  dn.innerHTML = fn==='sin' ? 'cos x' : '−sin x';
+  document.getElementById('w1-a').value=-2*PI; drawW1();
+}
+document.getElementById('w1-a').addEventListener('input', ()=>{ stopW1(); addTrail(); drawW1(); });
+document.getElementById('w1-play').addEventListener('click', playW1);
+document.getElementById('w1-show').addEventListener('click', e=>{ W1.show=!W1.show; e.currentTarget.classList.toggle('on',W1.show); drawW1(); });
+document.getElementById('w1-reset').addEventListener('click', ()=>setFn(W1.fn));
+document.getElementById('w1-sin').addEventListener('click', ()=>setFn('sin'));
+document.getElementById('w1-cos').addEventListener('click', ()=>setFn('cos'));
+
+
+/* ========================================================================
+   8 · RENDER ALL FIGURES  (called again on every theme change)
+   ======================================================================== */
+function renderFigures(){
+  document.querySelectorAll('[data-fig]').forEach(h=>{ const f=FIGS[h.dataset.fig]; if(f) f(h); });
+  drawW1();
+}
+
+/* ========================================================================
+   9 · FIT — scale each slide's content to the 1600 x 900 canvas
+   Sparse slides are enlarged up to data-zmax, dense ones are reduced, so a
+   slide never scrolls and never spills past its frame. Hidden fragments keep
+   their space, so the fit already accounts for the fully revealed solution.
+   ======================================================================== */
+function fitSlide(sec){
+  const main=sec.querySelector('.sl-main'), fit=sec.querySelector('.sl-fit');
+  if(!main||!fit) return true;
+  const W=main.clientWidth, H=main.clientHeight;
+  if(!W||!H) return false;                       // slide not laid out yet (display:none)
+  const zmax=parseFloat(sec.dataset.zmax||'1'), zmin=0.55;
+  const tall=z=>{ fit.style.width=(W/z)+'px'; return fit.offsetHeight*z; };
+  // a display equation wider than its column also counts as "does not fit"
+  const wide=()=>{ for(const e of fit.querySelectorAll('.katex-display')) if(e.scrollWidth>e.clientWidth+1) return true; return false; };
+  const fits=z=>tall(z)<=H && !wide();
+  let z=zmax;
+  if(!fits(z)){
+    let lo=zmin, hi=zmax;
+    for(let i=0;i<10;i++){ const m=(lo+hi)/2; if(fits(m)) lo=m; else hi=m; }
+    z=lo;
+  }
+  const used=tall(z);
+  const dy=(sec.dataset.valign==='center') ? Math.max(0,(H-used)/2) : 0;
+  fit.style.transform=`translate(0px,${dy.toFixed(1)}px) scale(${z.toFixed(4)})`;
+  sec.dataset.z=z.toFixed(3);
+  return true;
+}
+function fitAll(force){
+  document.querySelectorAll('.reveal .slides section').forEach(sec=>{
+    if(!sec.querySelector(':scope > .sl')) return;
+    if(force) delete sec.dataset.fitted;
+    if(!sec.dataset.fitted && fitSlide(sec)) sec.dataset.fitted='1';
+  });
+}
+
+/* ========================================================================
+   10 · FULL-SCREEN BOARD
+   One board for the whole deck, called over any slide. Ink is kept per slide
+   and per layer ("Over slide" / "Blank page") and is stored in slide
+   coordinates, so it stays aligned with the slide when the window resizes.
+   ======================================================================== */
+const SWATCHES=['teal','gold','ink','rose','blue'];
+const Board=(function(){
+  const el=document.getElementById('board'), cv=el.querySelector('canvas'), ctx=cv.getContext('2d');
+  const INK={};
+  let mode='over', tok='teal', width=2.5, erasing=false, cur=null, pid=null, open=false;
+
+  const key=()=>{
+    if(!window.Reveal || !Reveal.isReady || !Reveal.isReady()) return '0.0';
+    const i=Reveal.getIndices(); return (i.h||0)+'.'+(i.v||0);
+  };
+  const slot =()=>{ const k=key(); return INK[k]||(INK[k]={over:[],page:[]}); };
+  const layer=()=>slot()[mode];
+  const frame=()=>{
+    const s=document.querySelector('.reveal .slides'), r=s?s.getBoundingClientRect():null;
+    return (r&&r.width) ? r : {left:0,top:0,width:window.innerWidth,height:window.innerHeight};
+  };
+
+  function stroke(s,r,i0){
+    if(!s.pts.length) return;
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.globalCompositeOperation = s.erase?'destination-out':'source-over';
+    ctx.strokeStyle = P()[s.tok]||s.tok;
+    ctx.lineWidth = s.w*r.width/1600;
+    const px=p=>[r.left+p[0]*r.width, r.top+p[1]*r.height];
+    const a=px(s.pts[Math.max(0,i0-1)]);
+    ctx.beginPath(); ctx.moveTo(a[0],a[1]);
+    if(s.pts.length===1) ctx.lineTo(a[0]+0.1,a[1]+0.1);
+    for(let i=Math.max(1,i0);i<s.pts.length;i++){ const b=px(s.pts[i]); ctx.lineTo(b[0],b[1]); }
+    ctx.stroke();
+    ctx.globalCompositeOperation='source-over';
+  }
+  function redraw(){
+    ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    const r=frame(); layer().forEach(s=>stroke(s,r,0));
+  }
+  function size(){
+    const dpr=window.devicePixelRatio||1;
+    cv.width=Math.round(window.innerWidth*dpr); cv.height=Math.round(window.innerHeight*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0); redraw();
+  }
+  const pos=(e,r)=>[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];
+
+  cv.addEventListener('pointerdown',e=>{
+    if(pid!==null) return;                       // one pen at a time: ignore a resting palm
+    e.preventDefault(); pid=e.pointerId;
+    try{ cv.setPointerCapture(pid); }catch(_){}
+    const r=frame();
+    cur={tok:tok, w: erasing?width*5:width, erase:erasing, pts:[pos(e,r)]};
+    layer().push(cur); stroke(cur,r,0); mark();
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(!cur || e.pointerId!==pid) return;
+    const r=frame(), n=cur.pts.length;
+    const evs=(e.getCoalescedEvents && e.getCoalescedEvents().length) ? e.getCoalescedEvents() : [e];
+    evs.forEach(ev=>cur.pts.push(pos(ev,r)));
+    stroke(cur,r,n);
+  });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>cv.addEventListener(ev,e=>{
+    if(e.pointerId!==pid) return; cur=null; pid=null;
+  }));
+
+  const sws=[...el.querySelectorAll('.sw')], szs=[...el.querySelectorAll('.szbtn')];
+  const bEr=el.querySelector('.js-eraser'), bOver=el.querySelector('.js-over'), bPage=el.querySelector('.js-page');
+  const paintSwatches=()=>sws.forEach(sw=>{ sw.style.background=P()[sw.dataset.tok]; });
+
+  function setErase(on){ erasing=on; bEr.classList.toggle('on',on); el.classList.toggle('erasing',on); }
+  function setMode(m){
+    mode=m; el.classList.toggle('over',m==='over'); el.classList.toggle('page',m==='page');
+    bOver.classList.toggle('on',m==='over'); bPage.classList.toggle('on',m==='page');
+    redraw();
+  }
+  sws.forEach(sw=>sw.addEventListener('click',()=>{
+    sws.forEach(o=>o.classList.remove('on')); sw.classList.add('on'); tok=sw.dataset.tok; setErase(false);
+  }));
+  szs.forEach(b=>b.addEventListener('click',()=>{
+    szs.forEach(o=>o.classList.remove('on')); b.classList.add('on'); width=parseFloat(b.dataset.w);
+  }));
+  bEr.addEventListener('click',()=>setErase(!erasing));
+  const undo=()=>{ layer().pop(); redraw(); mark(); };
+  el.querySelector('.js-undo').addEventListener('click',undo);
+  el.querySelector('.js-clear').addEventListener('click',()=>{ layer().length=0; redraw(); mark(); });
+  bOver.addEventListener('click',()=>setMode('over'));
+  bPage.addEventListener('click',()=>setMode('page'));
+  el.querySelector('.js-prev').addEventListener('click',()=>{ if(window.Reveal) Reveal.prev(); });
+  el.querySelector('.js-next').addEventListener('click',()=>{ if(window.Reveal) Reveal.next(); });
+  el.querySelector('.js-close').addEventListener('click',()=>toggle(false));
+
+  function mark(){
+    const s=INK[key()], b=document.getElementById('bBoard');
+    if(b) b.classList.toggle('has-ink', !!(s && (s.over.length || s.page.length)));
+  }
+  function toggle(force){
+    open = (typeof force==='boolean') ? force : !open;
+    el.classList.toggle('on',open);
+    document.body.classList.toggle('board-open',open);
+    if(open){ cur=null; pid=null; paintSwatches(); setMode(mode); size(); }
+    mark();
+  }
+  window.addEventListener('resize',()=>{ if(open) size(); });
+  // Esc closes the board first (reveal.js would otherwise open the overview underneath it)
+  document.addEventListener('keydown',e=>{
+    if(!open) return;
+    if(e.key==='Escape'){ e.preventDefault(); e.stopImmediatePropagation(); toggle(false); }
+    else if((e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){ e.preventDefault(); e.stopImmediatePropagation(); undo(); }
+  }, true);
+
+  return { toggle, isOpen:()=>open, paintSwatches,
+           refresh:()=>{ if(open){ cur=null; pid=null; redraw(); } mark(); } };
+})();
+
+/* ========================================================================
+   11 · WIRING
+   ======================================================================== */
+
+function toggleTheme(){
+  theme = (theme==='dark')?'light':'dark';
+  ROOT.setAttribute('data-theme', theme);
+  try{ localStorage.setItem('lesson33-theme', theme); }catch(e){}
+  renderFigures();
+  Board.paintSwatches(); Board.refresh();
+}
+document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+
+/* A focused slider or button would swallow the arrow keys and Space, so the
+   lecturer's next key press would move the slider instead of the slide.
+   Hand the keyboard back to the deck as soon as the control is released. */
+const giveBackKeys=()=>{ const a=document.activeElement; if(a && a!==document.body && a.blur) a.blur(); };
+document.querySelectorAll('input[type=range]').forEach(i=>
+  ['pointerup','touchend','change'].forEach(ev=>i.addEventListener(ev,giveBackKeys)));
+document.addEventListener('click',e=>{ if(e.target.closest('button')) giveBackKeys(); });
+
+const $=id=>document.getElementById(id);
+$('bPrev').addEventListener('click',()=>{ if(window.Reveal) Reveal.prev(); });
+$('bNext').addEventListener('click',()=>{ if(window.Reveal) Reveal.next(); });
+$('bOver').addEventListener('click',()=>{ if(window.Reveal) Reveal.toggleOverview(); });
+$('bBoard').addEventListener('click',()=>Board.toggle());
+$('bFull').addEventListener('click',()=>{
+  const d=document, r=d.documentElement;
+  if(d.fullscreenElement||d.webkitFullscreenElement){ (d.exitFullscreen||d.webkitExitFullscreen).call(d); }
+  else{ const f=r.requestFullscreen||r.webkitRequestFullscreen; if(f){ const p=f.call(r); if(p&&p.catch) p.catch(()=>{}); } }
+});
+
+function updateBar(){
+  if(!window.Reveal || !Reveal.isReady()) return;
+  const i=Reveal.getIndices(), h=i.h||0, v=i.v||0;
+  $('bPos').innerHTML='<b>'+(h===0?'Title':h+'.'+(v+1))+'</b>'+(Reveal.getSlidePastCount()+1)+' / '+Reveal.getTotalSlides();
+  $('bPrev').disabled = Reveal.isFirstSlide() && !Reveal.availableFragments().prev;
+  $('bNext').disabled = Reveal.isLastSlide()  && !Reveal.availableFragments().next;
+  $('bOver').classList.toggle('on', Reveal.isOverview());
+}
+
+/* ========================================================================
+   12 · BOOT — KaTeX, then reveal.js. Each library has a second CDN to fall
+   back on, and the lesson still opens as a plain page if reveal.js is blocked.
+   ======================================================================== */
+const CDN={
+  katex :['https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js',
+          'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js'],
+  auto  :['https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js',
+          'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js'],
+  reveal:['https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.min.js',
+          'https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js'],
+  notes :['https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/plugin/notes/notes.min.js',
+          'https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js']
+};
+function loadScript(urls, ok){
+  return new Promise(res=>{
+    let i=0;
+    (function next(){
+      if(ok()) return res(true);
+      if(i>=urls.length) return res(false);
+      const s=document.createElement('script'); let done=false;
+      const fin=good=>{ if(done) return; done=true; clearTimeout(t); if(good&&ok()) res(true); else{ s.remove(); next(); } };
+      const t=setTimeout(()=>fin(false),12000);
+      s.onload=()=>fin(true); s.onerror=()=>fin(false);
+      s.src=urls[i++]; document.head.appendChild(s);
+    })();
+  });
+}
+function renderMath(){
+  if(typeof renderMathInElement!=='function') return;
+  renderMathInElement(document.body,{
+    delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+    ignoredClasses:['notes'],
+    throwOnError:false
+  });
+}
+
+async function boot(){
+  if(window.self!==window.top) document.body.classList.add('embedded');   // speaker-view preview frames
+  renderFigures();
+
+  const math = loadScript(CDN.katex, ()=>typeof katex!=='undefined')
+    .then(()=>loadScript(CDN.auto, ()=>typeof renderMathInElement==='function'))
+    .then(renderMath);
+  const deck = loadScript(CDN.reveal, ()=>typeof Reveal!=='undefined')
+    .then(ok=>ok ? loadScript(CDN.notes, ()=>typeof RevealNotes!=='undefined').then(()=>true) : false);
+  const [, haveReveal] = await Promise.all([math, deck]);
+
+  if(!haveReveal){
+    document.body.classList.remove('booting');
+    document.body.classList.add('no-reveal');
+    return;
+  }
+
+  await Reveal.initialize({
+    width:1600, height:900, margin:0, minScale:0.2, maxScale:4,
+    center:false, hash:true, respondToHashChanges:true,
+    controls:true, controlsLayout:'bottom-right', controlsBackArrows:'faded', controlsTutorial:true,
+    progress:true, slideNumber:false,
+    transition:'slide', backgroundTransition:'none',
+    navigationMode:'default', overview:true, touch:true, help:true,
+    plugins:(typeof RevealNotes!=='undefined') ? [RevealNotes] : []
+  });
+
+  Reveal.addKeyBinding({keyCode:87, key:'W', description:'Whiteboard'}, ()=>Board.toggle());
+  Reveal.addKeyBinding({keyCode:84, key:'T', description:'Light / dark theme'}, toggleTheme);
+
+  const sync=()=>{ fitAll(false); updateBar(); Board.refresh(); };
+  ['slidechanged','fragmentshown','fragmenthidden','overviewshown','overviewhidden'].forEach(ev=>Reveal.on(ev,sync));
+  Reveal.on('resize',()=>{ Board.refresh(); });
+
+  fitAll(true); updateBar();
+  document.body.classList.remove('booting');
+  // web fonts change line lengths once they arrive — measure again
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>fitAll(true));
+  window.addEventListener('load',()=>fitAll(true));
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+</script>
+
+</body>
+</html>
